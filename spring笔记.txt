@@ -1,0 +1,40 @@
+﻿Spring配置的可选方案
+  在XML中进行显式配置。
+  在Java中进行显式配置。
+  隐式的bean发现机制和自动装配
+ @ComponentScan注解
+ @ComponentScan默认会扫描与配置类相同的包。Spring将会扫描这个包以及这个包下的所有子包，查找带有@Component注解的类
+ 为组件扫描的bean命名
+     @Component("ID") 或 @Named("ID")
+ 设置组件扫描的基础包
+     @ComponentScan("path")
+	 @ComponentScan(basePackages="path") 或传递数组@ComponentScan(basePackages={"path1","path2"})
+ @ComponentScan还提供了另外一种方法，那就是将其指定为包中所包含的类或接口,basePackageClasses
+ 通过为bean添加注解实现自动装配,@Autowired注解
+java代码装配bean
+ 声明简单的bean
+ @Bean注解会告诉Spring这个方法将会返回一个对象，该对象要注册为Spring应用上下文中的bean。方法体中包含了最终产生bean实例的逻辑。
+ 默认情况下，bean的ID与带有@Bean注解的方法名是一样的
+处理自动装配的歧义性
+ 标示首选的bean @Primary
+ 限定自动装配的bean @Qualifier，也可表示定义限定符名称
+Spring定义了多种作用域，可以基于这些作用域创建bean，包括：
+  单例（Singleton）：在整个应用中，只创建bean的一个实例。
+  原型（Prototype）：每次注入或者通过Spring应用上下文获取的时候，都会创建一个新的bean实例。
+  会话（Session）：在Web应用中，为每个会话创建一个bean实例。
+  请求（Rquest）：在Web应用中，为每个请求创建一个bean实例。
+  单例是默认的作用域，如果选择其他的作用域，要使用@Scope注解，它可以与@Component或@Bean一起使用。
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Scope(value=WebApplicationContext.SCOPE_SESSION,proxyMode=ScopedProxyMode.INTERFACES)作用域代理能够延迟注入请求和会话作用域的bean
+
+在软件开发中，散布于应用中多处的功能被称为横切关注点（cross-cutting concern）
+DI有助于应用对象之间的解耦，而AOP可以实现横切关注点与它们所影响的对象之间的解耦
+描述切面的常用术语有通知（advice）、切点（pointcut）和连接点（join point）
+Spring切面可以应用5种类型的通知：
+  前置通知（Before）：在目标方法被调用之前调用通知功能；
+  后置通知（After）：在目标方法完成之后调用通知，此时不会关心方法的输出是什么；
+  返回通知（After-returning）：在目标方法成功执行之后调用通知；
+  异常通知（After-throwing）：在目标方法抛出异常后调用通知；
+  环绕通知（Around）：通知包裹了被通知的方法，在被通知的方法调用之前和调用之后执行自定义的行为。
+连接点（Join poin）
+  连接点是在应用执行过程中能够插入切面的一个点。这个点可以是调用方法时、抛出异常时、甚至修改一个字段时。切面代码可以利用这些点插入到应用的正常流程之中，并添加新的行为
